@@ -75,7 +75,6 @@ BAŞLA
   C'yi Hexadecimal formata çevir ve DÖNDÜR
 BİTİR
 ---
-
 flowchart TD
     Start([BAŞLA]) --> Input[/Girdi: Anahtar Seed ve Acik Metin P/]
     Input --> Init[Anahtari Binary Formatina Cevir]
@@ -89,6 +88,11 @@ flowchart TD
     NewRow --> Extract[Orta Biti Sec ve Listeye Ekle]
     Extract --> Update[Diziyi Guncelle]
     Update --> CheckLoop
+    
+    CheckLoop -- Evet --> Encrypt[XOR Islemi: Metin ve Anahtar Akisi]
+    Encrypt --> Hex[Sonucu Hexadecimale Cevir]
+    Hex --> Output[/Cikti: Sifreli Metin/]
+    Output --> End([BITIR])
     
     CheckLoop -- Evet --> Encrypt[XOR Islemi: Metin ve Anahtar Akisi]
     Encrypt --> Hex[Sonucu Hexadecimale Cevir]
