@@ -74,3 +74,26 @@ BAŞLA
 
   C'yi Hexadecimal formata çevir ve DÖNDÜR
 BİTİR
+---
+
+## 📊 Algoritma Akış Şeması
+
+```mermaid
+flowchart TD
+    Start([BAŞLA]) --> Input[/Girdi: Anahtar Seed ve Açık Metin P/]
+    Input --> Init[Anahtarı Binary'ye Çevir Başlangıç Dizisi S]
+    Init --> Length[Metin Uzunluğunu Hesapla L]
+    
+    Length --> CheckLoop{Anahtar Akışı < L ?}
+    
+    CheckLoop -- Evet (Bit Lazım) --> Rule30[Rule 30 Fonksiyonunu Uygula]
+    Rule30 --> Apply[Sol XOR Kendisi VEYA Sağ]
+    Apply --> NewRow[Yeni Satır Oluştur]
+    NewRow --> Extract[Orta Biti Seç ve Listeye Ekle]
+    Extract --> Update[Diziyi Güncelle S = YeniSatir]
+    Update --> CheckLoop
+    
+    CheckLoop -- Hayır (Yeterli Bit Var) --> Encrypt[XOR İşlemi: Metin ^ Anahtar Akışı]
+    Encrypt --> Hex[Sonucu Hexadecimal'e Çevir]
+    Hex --> Output[/Çıktı: Şifreli Metin/]
+    Output --> End([BİTİR])
