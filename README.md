@@ -75,26 +75,44 @@ BAŞLA
   C'yi Hexadecimal formata çevir ve DÖNDÜR
 BİTİR
 ---
-flowchart TD
-    Start([BAŞLA]) --> Input[/Girdi: Anahtar Seed ve Acik Metin P/]
-    Input --> Init[Anahtari Binary Formatina Cevir]
-    Init --> Length[Metin Uzunlugunu Hesapla L]
-    
-    Length --> CheckLoop{Anahtar Akisi Yeterli mi?}
-    
-    CheckLoop -- Hayir --> Rule30[Rule 30 Fonksiyonunu Uygula]
-    Rule30 --> Apply[Sol XOR Kendisi VEYA Sag]
-    Apply --> NewRow[Yeni Satir Olustur]
-    NewRow --> Extract[Orta Biti Sec ve Listeye Ekle]
-    Extract --> Update[Diziyi Guncelle]
-    Update --> CheckLoop
-    
-    CheckLoop -- Evet --> Encrypt[XOR Islemi: Metin ve Anahtar Akisi]
-    Encrypt --> Hex[Sonucu Hexadecimale Cevir]
-    Hex --> Output[/Cikti: Sifreli Metin/]
-    Output --> End([BITIR])
-    
-    CheckLoop -- Evet --> Encrypt[XOR Islemi: Metin ve Anahtar Akisi]
-    Encrypt --> Hex[Sonucu Hexadecimale Cevir]
-    Hex --> Output[/Cikti: Sifreli Metin/]
-    Output --> End([BITIR])
+---
+
+## 📊 Algoritma Akış Şeması
+
+```text
+       [ BAŞLA ]
+           |
+           v
+  /-------------------------\
+ /  GİRİŞ: Anahtar (Seed)    \
+ \    ve Açık Metin (P)      /
+  \-------------------------/
+           |
+           v
+ [ Anahtarı Binary'ye Çevir ]
+      (Başlangıç Dizisi S)
+           |
+           v
+ [ Metin Uzunluğunu Hesapla ] <-----------------------+
+           |                                          |
+           v                                          |
+   < Yeterli Bit Var mı? >-----(Hayır/Bit Lazım)----->|
+           |                                          |
+        (Evet)                             [ Rule 30 Uygula ]
+           |                               (Sol XOR [Kendisi VEYA Sağ])
+           |                                          |
+           v                                          |
+    [ XOR İşlemi Yap ]                     [ Yeni Satır Oluştur ]
+ (Metin ^ Anahtar Akışı)                              |
+           |                                          |
+           v                               [ Orta Biti Seç ve Ekle ]
+ [ Hexadecimal'e Çevir ]                              |
+           |                                          |
+           v                               [ Diziyi Güncelle ]
+  /-------------------------\                         |
+ /   ÇIKTI: Şifreli Metin    \                        |
+ \       (Ciphertext)        /                        |
+  \-------------------------/                         |
+           |                                          |
+           v                                          |
+       [ BİTİR ] <------------------------------------+
