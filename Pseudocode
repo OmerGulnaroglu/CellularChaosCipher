@@ -1,0 +1,31 @@
+## 💻 Algoritma Sözde Kodu (Pseudo-Code)
+
+Aşağıdaki adımlar, şifreleme motorunun mantıksal işleyişini ifade eder.
+
+```text
+BAŞLA
+  GİRDİLER: Anahtar (K), Açık Metin (P)
+  ÇIKTI: Şifreli Metin (C)
+
+  1. K'yi binary formata çevir -> Durum Dizisi (S) oluştur.
+  2. P'nin uzunluğunu al -> (L)
+  3. AnahtarAkisi listesini boşalt.
+
+  DÖNGÜ (AnahtarAkisi uzunluğu < L olduğu sürece):
+      YeniSatir listesi oluştur.
+      HER Hücre İÇİN (S dizisinde):
+          YeniDeger = Sol XOR (Kendisi OR Sag)
+          YeniSatir'a ekle.
+      S = YeniSatir (Durumu güncelle)
+      OrtaBit = S dizisinin ortasındaki eleman
+      AnahtarAkisi'na ekle (OrtaBit)
+  DÖNGÜ SONU
+
+  HER i İÇİN (0'dan L'ye kadar):
+      SifreliBit = P[i] XOR AnahtarAkisi[i]
+      C'ye ekle (SifreliBit)
+
+  C'yi Hexadecimal formata çevir ve DÖNDÜR
+BİTİR
+---
+---
