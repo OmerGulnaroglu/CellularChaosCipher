@@ -76,24 +76,21 @@ BAŞLA
 BİTİR
 ---
 
-## 📊 Algoritma Akış Şeması
-
-```mermaid
 flowchart TD
-    Start([BAŞLA]) --> Input[/Girdi: Anahtar Seed ve Açık Metin P/]
-    Input --> Init[Anahtarı Binary'ye Çevir Başlangıç Dizisi S]
-    Init --> Length[Metin Uzunluğunu Hesapla L]
+    Start([BAŞLA]) --> Input[/Girdi: Anahtar Seed ve Acik Metin P/]
+    Input --> Init[Anahtari Binary Formatina Cevir]
+    Init --> Length[Metin Uzunlugunu Hesapla L]
     
-    Length --> CheckLoop{Anahtar Akışı < L ?}
+    Length --> CheckLoop{Anahtar Akisi Yeterli mi?}
     
-    CheckLoop -- Evet (Bit Lazım) --> Rule30[Rule 30 Fonksiyonunu Uygula]
-    Rule30 --> Apply[Sol XOR Kendisi VEYA Sağ]
-    Apply --> NewRow[Yeni Satır Oluştur]
-    NewRow --> Extract[Orta Biti Seç ve Listeye Ekle]
-    Extract --> Update[Diziyi Güncelle S = YeniSatir]
+    CheckLoop -- Hayir --> Rule30[Rule 30 Fonksiyonunu Uygula]
+    Rule30 --> Apply[Sol XOR Kendisi VEYA Sag]
+    Apply --> NewRow[Yeni Satir Olustur]
+    NewRow --> Extract[Orta Biti Sec ve Listeye Ekle]
+    Extract --> Update[Diziyi Guncelle]
     Update --> CheckLoop
     
-    CheckLoop -- Hayır (Yeterli Bit Var) --> Encrypt[XOR İşlemi: Metin ^ Anahtar Akışı]
-    Encrypt --> Hex[Sonucu Hexadecimal'e Çevir]
-    Hex --> Output[/Çıktı: Şifreli Metin/]
-    Output --> End([BİTİR])
+    CheckLoop -- Evet --> Encrypt[XOR Islemi: Metin ve Anahtar Akisi]
+    Encrypt --> Hex[Sonucu Hexadecimale Cevir]
+    Hex --> Output[/Cikti: Sifreli Metin/]
+    Output --> End([BITIR])
