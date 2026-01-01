@@ -19,23 +19,44 @@
 
 Bu proje, **Bilgi Sistemleri Güvenliği** dersi kapsamında; kriptografik sistemlerin temeli olan **"Rastgelelik"** ve **"Akış Şifreleme (Stream Cipher)"** kavramlarını uygulamalı olarak göstermek amacıyla geliştirilmiştir.
 
-Standart matematiksel yöntemler yerine, **Stephen Wolfram**'ın **Rule 30 Hücresel Otomat** kuralı ve **Kaos Teorisi** kullanılarak özgün bir şifreleme motoru tasarlanmıştır. Bu yapı, anahtardaki en ufak değişimin sonucu tamamen değiştirmesi (Çığ Etkisi) üzerine kuruludur.
+Standart aritmetik yöntemler (Collatz vb.) yerine, **Stephen Wolfram**'ın **Rule 30 Hücresel Otomat** kuralı ve **Kaos Teorisi** kullanılarak özgün bir şifreleme motoru tasarlanmıştır.
 
 ---
 
-## ⚙️ Teknik Yapı
+## 🧠 Algoritma Tarifi ve Matematiksel Model ($g$ Fonksiyonu)
 
-Sistem, **Simetrik Şifreleme** prensiplerine dayanır.
-1.  **Girdi:** Kullanıcıdan bir "Anahtar (Seed)" ve "Mesaj" alınır.
-2.  **Kaos Motoru:** Rule 30 algoritması, anahtarı kullanarak karmaşık bir bit dizisi (Keystream) üretir.
-3.  **Şifreleme:** Mesajın bitleri ile üretilen rastgele bitler **XOR** işlemine sokulur.
+Proje, istenilen **"İteratif Dönüşüm Fonksiyonu ($g$) ile Anahtar Dizisi Üretimi"** prensibine dayanır.
+
+### 1. Dönüşüm Fonksiyonu ($g$)
+Algoritmanın çekirdeği olan **Rule 30** fonksiyonu, bir bitin yeni değerini belirlerken şu matematiksel kuralı uygular:
+
+$$g(C) = C_{sol} \oplus (C_{merkez} \lor C_{sağ})$$
+
+* **Sözel İfade:** Bir hücrenin yeni değeri; **Sol Komşu** ile **(Kendisi VEYA Sağ Komşu)** değerinin **XOR** işlemine sokulmasıyla bulunur.
+
+### 2. Adım Adım Çalışma Mantığı
+Algoritma (Generator) şu döngüyü takip eder:
+
+1.  **Başlangıç (Initialization):** Kullanıcıdan alınan "Anahtar" (Seed) ikili sisteme (binary) çevrilir ve ilk satır oluşturulur.
+2.  **Dönüşüm ($g$ Uygulaması):** Dizideki her bit için yukarıdaki $g$ fonksiyonu uygulanır ve yeni bir satır üretilir.
+3.  **Seçim (Extraction):** Kaosun en yoğun olduğu **orta bit** seçilerek "Anahtar Akışı"na (Keystream) eklenir.
+4.  **Döngü (Loop):** Mesaj uzunluğu kadar bit üretilene kadar işlem tekrarlanır (Her yeni satır, bir sonrakinin girdisi olur).
+5.  **Şifreleme:** Elde edilen rastgele dizi ile mesaj **XOR** işlemine tabi tutulur.
+
+---
+
+## 🛡️ Güvenlik Analizi: Çığ Etkisi
+
+Algoritmanın "Kaotik" yapısı, **Çığ Etkisi (Avalanche Effect)** testleri ile doğrulanmıştır.
+* **Test:** Anahtardaki (Seed) sadece **1 bitlik değişim**, üretilen şifreli metinde **%40-%50** oranında değişime yol açmaktadır.
+* Bu durum, algoritmanın girdiye karşı son derece hassas ve tahmin edilemez olduğunu gösterir.
 
 ---
 
 ## 📂 Dosya Açıklamaları
 
 * **`main.py`**: **(Ana Dosya)** Programı çalıştıran arayüzdür. Şifreleme ve çözme işlemleri buradan yapılır.
-* **`chaos_engine.py`**: Algoritmanın beyni. Rule 30 mantığı burada çalışır.
+* **`chaos_engine.py`**: Algoritmanın beyni. $g$ fonksiyonu ve döngü burada çalışır.
 * **`security_analysis.py`**: Güvenlik testi dosyasıdır. Algoritmanın "Çığ Etkisi" performansını ölçer.
 
 ---
