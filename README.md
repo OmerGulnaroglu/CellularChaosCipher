@@ -19,7 +19,7 @@
 
 Bu proje, **Bilgi Sistemleri Güvenliği** dersi kapsamında; kriptografik sistemlerin temeli olan **"Rastgelelik"** ve **"Akış Şifreleme (Stream Cipher)"** kavramlarını uygulamalı olarak göstermek amacıyla geliştirilmiştir.
 
-Standart aritmetik yöntemler (Collatz vb.) yerine, **Stephen Wolfram**'ın **Rule 30 Hücresel Otomat** kuralı ve **Kaos Teorisi** kullanılarak özgün bir şifreleme motoru tasarlanmıştır.
+Standart aritmetik yöntemler yerine, **Stephen Wolfram**'ın **Rule 30 Hücresel Otomat** kuralı ve **Kaos Teorisi** kullanılarak özgün bir şifreleme motoru tasarlanmıştır.
 
 ---
 
@@ -40,32 +40,37 @@ Algoritma (Generator) şu döngüyü takip eder:
 1.  **Başlangıç (Initialization):** Kullanıcıdan alınan "Anahtar" (Seed) ikili sisteme (binary) çevrilir ve ilk satır oluşturulur.
 2.  **Dönüşüm ($g$ Uygulaması):** Dizideki her bit için yukarıdaki $g$ fonksiyonu uygulanır ve yeni bir satır üretilir.
 3.  **Seçim (Extraction):** Kaosun en yoğun olduğu **orta bit** seçilerek "Anahtar Akışı"na (Keystream) eklenir.
-4.  **Döngü (Loop):** Mesaj uzunluğu kadar bit üretilene kadar işlem tekrarlanır (Her yeni satır, bir sonrakinin girdisi olur).
+4.  **Döngü (Loop):** Mesaj uzunluğu kadar bit üretilene kadar işlem tekrarlanır.
 5.  **Şifreleme:** Elde edilen rastgele dizi ile mesaj **XOR** işlemine tabi tutulur.
 
 ---
 
-## 🛡️ Güvenlik Analizi: Çığ Etkisi
+## 💻 Algoritma Sözde Kodu (Pseudo-Code)
 
-Algoritmanın "Kaotik" yapısı, **Çığ Etkisi (Avalanche Effect)** testleri ile doğrulanmıştır.
-* **Test:** Anahtardaki (Seed) sadece **1 bitlik değişim**, üretilen şifreli metinde **%40-%50** oranında değişime yol açmaktadır.
-* Bu durum, algoritmanın girdiye karşı son derece hassas ve tahmin edilemez olduğunu gösterir.
+Aşağıdaki adımlar, şifreleme motorunun mantıksal işleyişini ifade eder.
 
----
+```text
+BAŞLA
+  GİRDİLER: Anahtar (K), Açık Metin (P)
+  ÇIKTI: Şifreli Metin (C)
 
-## 📂 Dosya Açıklamaları
+  1. K'yi binary formata çevir -> Durum Dizisi (S) oluştur.
+  2. P'nin uzunluğunu al -> (L)
+  3. AnahtarAkisi listesini boşalt.
 
-* **`main.py`**: **(Ana Dosya)** Programı çalıştıran arayüzdür. Şifreleme ve çözme işlemleri buradan yapılır.
-* **`chaos_engine.py`**: Algoritmanın beyni. $g$ fonksiyonu ve döngü burada çalışır.
-* **`security_analysis.py`**: Güvenlik testi dosyasıdır. Algoritmanın "Çığ Etkisi" performansını ölçer.
+  DÖNGÜ (AnahtarAkisi uzunluğu < L olduğu sürece):
+      YeniSatir listesi oluştur.
+      HER Hücre İÇİN (S dizisinde):
+          YeniDeger = Sol XOR (Kendisi OR Sag)
+          YeniSatir'a ekle.
+      S = YeniSatir (Durumu güncelle)
+      OrtaBit = S dizisinin ortasındaki eleman
+      AnahtarAkisi'na ekle (OrtaBit)
+  DÖNGÜ SONU
 
----
+  HER i İÇİN (0'dan L'ye kadar):
+      SifreliBit = P[i] XOR AnahtarAkisi[i]
+      C'ye ekle (SifreliBit)
 
-## 🚀 Nasıl Çalıştırılır?
-
-Proje Python 3 ile çalışır, ek kurulum gerektirmez.
-
-1. **Şifreleme Yapmak İçin:**
-   Terminalde şu komutu yazın:
-   ```bash
-   python main.py
+  C'yi Hexadecimal formata çevir ve DÖNDÜR
+BİTİR
